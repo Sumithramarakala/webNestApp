@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+           background: linear-gradient(to right, #a445b2, #d41872, #ff0066);
+            min-height: 100vh;
+        }
+
+        .register-container {
+            background: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgb(192, 192, 192);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .role-card {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+            cursor: pointer;
+        }
+
+        .role-card:hover {
+            border-color: rgb(128, 255, 0);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .role-card.selected {
+            border-color: rgb(255, 255, 255);
+            background: linear-gradient(135deg, #667eea, rgb(255, 0, 128));
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, rgb(0, 255, 0), #764ba2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .social-btn {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+
+        .social-btn:hover {
+            border-color: rgb(255, 0, 128);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-circle {
+            background: linear-gradient(135deg, rgb(255, 0, 128), #764ba2);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, rgb(255, 0, 128), #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+    <!-- Register Container -->
+    <div class="register-container rounded-2xl p-8 w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="logo-circle w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-plus text-white text-2xl"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-gradient mb-2">Create Account</h2>
+            <p class="text-gray-600">Join us and start your journey </p>
+        </div>
+
+        <!-- Register Form -->
+        <form action="/register" method="post" class="space-y-6" id="registerForm">
+            <!-- Username Field -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-user mr-2 text-blue-500"></i>Username
+                </label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    required
+                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none bg-white"
+                    placeholder="Enter your username"
+                />
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-lock mr-2 text-blue-500"></i>Password
+                </label>
+                <div class="relative">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password"
+                        required
+                        class="input-field w-full px-4 py-3 pr-12 rounded-lg focus:outline-none bg-white"
+                        placeholder="Create a strong password"
+                    />
+                    <button 
+                        type="button" 
+                        onclick="togglePassword()"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                        <i id="passwordIcon" class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Role Selection -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">
+                    Select Your Role
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="role-card rounded-lg p-4 text-center bg-white" onclick="selectRole('USER', this)">
+                        <div class="text-2xl mb-2">
+                            
+                        </div>
+                        <h3 >User</h3>
+                       
+                    </div>
+                    <div class="role-card rounded-lg p-4 text-center bg-white" onclick="selectRole('ADMIN', this)">
+                        <div class="text-2xl mb-2">
+                           
+                        </div>
+                        <h3 >Admin</h3>
+                        
+                    </div>
+                </div>
+                <select name="role" id="roleSelect" class="hidden">
+                    <option value="USER">User</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+
+            
+            <!-- Register Button -->
+            <button 
+                type="submit"
+                class="btn-primary w-full text-white font-semibold py-3 px-4 rounded-lg"
+                id="registerBtn"
+            >
+                
+                Create Account
+            </button>
+        </form>
+
+        
+        <!-- Login Link -->
+        <div class="text-center">
+            <p class="text-gray-600">
+                Already have an account? 
+                <a href="/login" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                    Log in here
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = 'USER';
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Role selection function
+        function selectRole(role, element) {
+            // Remove selected class from all role cards
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            element.classList.add('selected');
+            
+            // Update hidden select
+            document.getElementById('roleSelect').value = role;
+            selectedRole = role;
+        }
+
+        // Form validation
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', function(e) {
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (!username || !password || !terms) {
+                e.preventDefault();
+                alert('Please fill in all fields and accept the terms.');
+                return;
+            }
+        });
+
+        // Initialize default role selection
+        window.addEventListener('load', () => {
+            document.querySelector('.role-card').click();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977b42cd2683b2ac',t:'MTc1NjYzMDAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
